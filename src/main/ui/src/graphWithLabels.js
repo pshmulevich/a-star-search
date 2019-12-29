@@ -26,7 +26,7 @@ const GraphWithLabels = ({ width, height }) => {
     appData.setBestRoute([]);
     //console.log("appData.graph data", appData.graphData);
 
-    const serviceUrl = "http://localhost:8080/api/findRoute";
+    const serviceUrl = "/api/findRoute";
 
     const scenarioData = {
       //request body AKA payload
