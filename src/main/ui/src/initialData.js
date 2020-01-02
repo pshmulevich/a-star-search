@@ -1,71 +1,95 @@
-const scaleFactor = 100;
+export const scaleFactor = 200;
 export const initialZoomFactor = 1.0;
-const originalNodesMap = {
-  a: { x: 1 * scaleFactor, y: 1 * scaleFactor, key: "a" },
-  b: { x: 2 * scaleFactor, y: 0.4 * scaleFactor, key: "b" },
-  c: { x: 3 * scaleFactor, y: 1 * scaleFactor, key: "c" },
-  d: { x: 1.7 * scaleFactor, y: 1.95 * scaleFactor, key: "d" },
-  e: { x: 2 * scaleFactor, y: 1.79941 * scaleFactor, key: "e" },
-  f: { x: 2.8835 * scaleFactor, y: 3.9827 * scaleFactor, key: "f" },
-  g: { x: 0.998 * scaleFactor, y: 4 * scaleFactor, key: "g" },
-  h: { x: 1.053 * scaleFactor, y: 5.59554 * scaleFactor, key: "h" },
-  i: { x: 4 * scaleFactor, y: 0.7 * scaleFactor, key: "i" },
-  j: { x: 3.4 * scaleFactor, y: 2.1 * scaleFactor, key: "j" },
-  k: { x: 5 * scaleFactor, y: 1 * scaleFactor, key: "k" },
-  l: { x: 3.3 * scaleFactor, y: 3.104 * scaleFactor, key: "l" },
-  m: { x: 4.779 * scaleFactor, y: 4 * scaleFactor, key: "m" },
-  n: { x: 4.5 * scaleFactor, y: 4.5 * scaleFactor, key: "n" },
-  o: { x: 5.7 * scaleFactor, y: 4.9 * scaleFactor, key: "o" },
-  p: { x: 4.7 * scaleFactor, y: 5.8 * scaleFactor, key: "p" },
-  q: { x: 5.9 * scaleFactor, y: 5.9 * scaleFactor, key: "q" },
-  r: { x: 3.7 * scaleFactor, y: 4 * scaleFactor, key: "r" }
-};
-const initialData = {
-  originalNodesMap: originalNodesMap,
-  originalLinks: [
-    { sourceKey: "a", targetKey: "b" },
-    { sourceKey: "b", targetKey: "c" },
-    { sourceKey: "c", targetKey: "l" },
-    { sourceKey: "b", targetKey: "d" },
-    { sourceKey: "d", targetKey: "e" },
-    { sourceKey: "e", targetKey: "f" },
-    { sourceKey: "e", targetKey: "g" },
-    { sourceKey: "g", targetKey: "h" },
-    { sourceKey: "h", targetKey: "r" },
-    { sourceKey: "l", targetKey: "r" },
-    { sourceKey: "l", targetKey: "j" },
-    { sourceKey: "l", targetKey: "m" },
-    { sourceKey: "j", targetKey: "i" },
-    { sourceKey: "j", targetKey: "k" },
-    { sourceKey: "k", targetKey: "o" },
-    { sourceKey: "o", targetKey: "m" },
-    { sourceKey: "m", targetKey: "r" },
-    { sourceKey: "r", targetKey: "p" },
-    { sourceKey: "q", targetKey: "n" },
-    { sourceKey: "p", targetKey: "q" }
+
+export const initialScenarioData = {
+  from: "a",
+  to: "q",
+  nodes: {
+    a: { x: 1, y: 1, key: "a" },
+    b: { x: 2, y: 0.4, key: "b" },
+    c: { x: 3, y: 1, key: "c" },
+    d: { x: 1.7, y: 1.95, key: "d" },
+    e: { x: 2, y: 1.79941, key: "e" },
+    f: { x: 2.8835, y: 3.9827, key: "f" },
+    g: { x: 0.998, y: 4, key: "g" },
+    h: { x: 1.053, y: 5.59554, key: "h" },
+    i: { x: 4, y: 0.7, key: "i" },
+    j: { x: 3.4, y: 2.1, key: "j" },
+    k: { x: 5, y: 1, key: "k" },
+    l: { x: 3.3, y: 3.104, key: "l" },
+    m: { x: 4.779, y: 4, key: "m" },
+    n: { x: 4.5, y: 4.5, key: "n" },
+    o: { x: 5.7, y: 4.9, key: "o" },
+    p: { x: 4.7, y: 5.8, key: "p" },
+    q: { x: 5.9, y: 5.9, key: "q" },
+    r: { x: 3.7, y: 4, key: "r" }
+  },
+  edges: [
+    { from: "a", to: "b" },
+    { from: "b", to: "c" },
+    { from: "c", to: "l" },
+    { from: "b", to: "d" },
+    { from: "d", to: "e" },
+    { from: "e", to: "f" },
+    { from: "e", to: "g" },
+    { from: "g", to: "h" },
+    { from: "h", to: "r" },
+    { from: "l", to: "r" },
+    { from: "l", to: "j" },
+    { from: "l", to: "m" },
+    { from: "j", to: "i" },
+    { from: "j", to: "k" },
+    { from: "k", to: "o" },
+    { from: "o", to: "m" },
+    { from: "m", to: "r" },
+    { from: "r", to: "p" },
+    { from: "q", to: "n" },
+    { from: "p", to: "q" }
   ]
 };
 
-export const initialSourceNodeKey = "a";
-export const initialTargetNodeKey = "q";
+export const initialScenarioData1 = {
+  from: "a",
+  to: "q",
+  nodes: {
+    a: { x: 1, y: 1, key: "a" },
+    q: { x: 2.7, y: 2, key: "q" }
+  },
+  edges: [{ from: "a", to: "q" }]
+};
 
-export const linksMap = {};
+export const toInitialData = scenarioData => {
+  return {
+    to: scenarioData.to,
+    from: scenarioData.from,
+    originalNodesMap: scenarioData.nodes,
+    originalLinks: scenarioData.edges
+  };
+};
+
+const initialData = toInitialData(initialScenarioData);
+
+export default initialData;
 
 //postProcessData is data that can be used by what graph requires
 // Keeps object references to change data
 export const postProcessData = data => {
+  const linksMap = {};
   const updatedLinks = data.originalLinks.map(link => {
-    link.source = data.originalNodesMap[link.sourceKey];
-    link.target = data.originalNodesMap[link.targetKey];
-    linksMap[`${link.sourceKey},${link.targetKey}`] = link;
-    linksMap[`${link.targetKey},${link.sourceKey}`] = link;
+    link.source = data.originalNodesMap[link.from];
+    link.target = data.originalNodesMap[link.to];
+    linksMap[`${link.from},${link.to}`] = link;
+    linksMap[`${link.to},${link.from}`] = link;
     return link;
   });
   // We can now use updatedLinks
   data.links = updatedLinks;
+  data.linksMap = linksMap;
 
   const nodes = Object.values(data.originalNodesMap);
   const indexedNodes = nodes.map((node, index) => {
+    node.x = node.x * scaleFactor;
+    node.y = node.y * scaleFactor;
     node.index = index; // This creates index attribute in the existing node object
     return node;
   });
@@ -73,4 +97,3 @@ export const postProcessData = data => {
   data.nodes = indexedNodes;
   return data;
 };
-export default initialData;

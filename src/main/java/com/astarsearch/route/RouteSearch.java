@@ -3,8 +3,10 @@ package com.astarsearch.route;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -56,14 +58,9 @@ public class RouteSearch {
 			}
 		};
 
-		//		 Creates a PriorityQueue with the specified initial capacity
-		//		 that orders its elements according to the specified comparator.		 
-		//		 Parameters:
-		//		 initial capacity for this priority queue, comparator		 
-		//		 Throws:IllegalArgumentException - if initialCapacity is less than 1
-
 		PriorityQueue<Node> queue = new PriorityQueue<Node>(20, comparator);
-		queue.add(originNode);
+		Set<Point> seenPoints = new HashSet<>();
+		addToPriorityQueue(originNode, queue, seenPoints);
 
 
 		boolean found = false;
@@ -76,20 +73,36 @@ public class RouteSearch {
 				routingResults = new RoutingResultsDTO("Success", toEdges(lowestCostRoute));
 				continue; //skip remaining lines, go back to the loop
 			}
-			List<Node> moreRoutes = createMoreRoutes(lowestCostRoute, scenario);
-			queue.addAll(moreRoutes);
+			List<Node> moreRoutes = createMoreRoutes(lowestCostRoute, scenario, seenPoints);
+			for(Node route : moreRoutes) {
+				addToPriorityQueue(route, queue, seenPoints);
+			}			
 		}
 
 		return routingResults != null ? routingResults : new RoutingResultsDTO("Failed", null);
 	}
 
-	private void printRoute(Node lowestCostRoute) {
-		Node node = lowestCostRoute;
+	private void addToPriorityQueue(Node node, PriorityQueue<Node> queue, Set<Point> seenPoints) {
+		System.out.print("Adding new route: ");
+		printRoute(node);
+		queue.add(node);
+		markAsSeen(node, seenPoints);
+	}
+
+	private void markAsSeen(Node node, Set<Point> seenPoints) {
+		seenPoints.add(node.getCurrentPoint());		
+	}
+
+	private void printRoute(Node route) {
+		Node node = route;
+		StringBuilder routeString = new StringBuilder();
 		while(node != null) {
-			System.out.print(node.getCurrentPoint().getName());
+			routeString.append(node.getCurrentPoint().getName());
+//			System.out.print(node.getCurrentPoint().getName());
 			node = node.getParent();
 		}
-		System.out.println();
+		
+		System.out.println(routeString.reverse().toString());
 
 	}
 
@@ -123,8 +136,7 @@ public class RouteSearch {
 
 		List<RouteEdge> lowestCostRouteEdges = new ArrayList<>();
 
-		while(node != null) {
-			System.out.print(node.getCurrentPoint().getName());			
+		while(node != null) {			
 			node = node.getParent();
 			if(node != null) {
 				// Moving in reverse, know only destination when we 
@@ -152,19 +164,34 @@ public class RouteSearch {
 	}
 	/**
 	 * Move along outbound edges until you reach destination
-	 * @param parent
+	 * @param currentNode
 	 * @param scenario 
 	 * @return created route array list
 	 */
-	private List<Node> createMoreRoutes(Node parent, DynamicScenario scenario) {
+	private List<Node> createMoreRoutes(Node currentNode, DynamicScenario scenario, Set<Point> seenPoints) {
 		List<Node> createdRoutes = new ArrayList<>();
 
 		//Create a list of edges from the parent node.
-		List<Edge> neighbors = parent.getNeighbors();
+		List<Edge> neighbors = currentNode.getNeighbors();
 		for(Edge neighbor : neighbors) {
 			Point neighborPoint = neighbor.getEnd();
-			Node neighborNode = createNode(parent, neighbor, neighborPoint, scenario.getOutboundEdges(neighborPoint));
+
+			Node parentNode = currentNode.getParent();
+			if(parentNode != null ) {
+				Point parentPoint = parentNode.getCurrentPoint();
+				if(parentPoint.equals(neighborPoint)) {					
+					continue; // Parent is a neighbor, but we don't want to go back to parent
+				}
+			}
+
+			if(seenPoints.contains(neighborPoint)) {
+				// Do not want to disallow seen points completely but want to keep track of them.
+				// Sometimes different route may have this point but with lower cost (with edge cost factor enabled).
+				System.out.println("Seen this point already: " + neighborPoint.getName());
+			}
+			Node neighborNode = createNode(currentNode, neighbor, neighborPoint, scenario.getOutboundEdges(neighborPoint));
 			createdRoutes.add(neighborNode);			
+
 		}		
 
 		return createdRoutes;

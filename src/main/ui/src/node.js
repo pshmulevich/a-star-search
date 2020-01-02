@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { DataContext } from "./dataContext";
+import { scaleFactor } from "./initialData";
 
 // const handleNodeClick = (node, appData) => {
 //   //appData.setActiveNode(node);
 // };
 const Node = props => {
+  const [nodeSelected, setNodeSelected] = useState(false);
   const { node } = props;
   const appData = useContext(DataContext);
   const activeNodeIndex = node.index;
@@ -18,14 +20,17 @@ const Node = props => {
   //   appData.targetNodeKey
   // );
   const nodeColor =
-    node.key === appData.sourceNodeKey
+    node.key === appData.graphData.from
       ? "green"
-      : node.key === appData.targetNodeKey
+      : node.key === appData.graphData.to
       ? "red"
+      : nodeSelected
+      ? "orange"
       : "#21D4FD";
 
   const handleMouseDown = e => {
     e.preventDefault();
+    setNodeSelected(true);
     const touchIsEnabled = e.changedTouches && e.changedTouches.length;
     const touchEvent = touchIsEnabled ? e.changedTouches[0] : e;
     // Record our starting point.
@@ -40,6 +45,7 @@ const Node = props => {
   };
 
   const handleMouseUp = e => {
+    setNodeSelected(false);
     appData.setDragging(false);
     appData.setActiveNodeIndex(-1);
   };
@@ -53,9 +59,11 @@ const Node = props => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      <circle r={15} fill={nodeColor} />
-      <text dy={2} dx={18} fill="white" fontFamily="arial">
-        {`${node.key} (${node.x}, ${node.y})`}
+      <circle r={nodeSelected ? 30 : 15} fill={nodeColor} />
+      <text dy={2} dx={18} fill="gold" fontFamily="arial">
+        {`${node.key.toUpperCase()} (${(node.x / scaleFactor).toFixed(2)}, ${(
+          node.y / scaleFactor
+        ).toFixed(2)})`}
       </text>
     </g>
   );

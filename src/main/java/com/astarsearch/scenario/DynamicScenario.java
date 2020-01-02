@@ -43,11 +43,15 @@ public class DynamicScenario {
 		Assert.notEmpty(edgesData, "edgesData must not be null or empty");
 		
 		for(EdgeDTO edgeData : edgesData) {
-			String sourceKey = edgeData.getSourceKey();
-			Point sourcePoint = getPoint(sourceKey);
+			String from = edgeData.getFrom();
+			Assert.hasLength(from, "Value of \"from\" must not be null or empty");
+
+			Point sourcePoint = getPoint(from);
 			
-			String targetKey = edgeData.getTargetKey();
-			Point targetPoint = getPoint(targetKey);
+			String to = edgeData.getTo();
+			Assert.hasLength(from, "Value of \"to\" must not be null or empty");
+
+			Point targetPoint = getPoint(to);
 			
 			addEdge(sourcePoint, targetPoint, edgeCostFactor);
 		}

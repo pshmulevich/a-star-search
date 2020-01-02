@@ -79,3 +79,16 @@ body,
 .rTableBody {
   display: table-row-group;
 }
+
+.scenarioData {
+  height: 300px;
+  width: 90%;
+}
+
+.errorsFound {
+  border: solid thin red;
+}
+
+.errorMessage {
+  color: red;
+}

@@ -14,6 +14,9 @@ export default class Dashboard extends React.Component {
           <NavLink exact to="/settings">
             Settings
           </NavLink>
+          <NavLink exact to="/about">
+            About
+          </NavLink>
         </div>
         <div className="content">{this.props.children}</div>
       </div>

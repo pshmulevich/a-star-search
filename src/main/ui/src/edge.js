@@ -1,4 +1,5 @@
 import React from "react";
+import { scaleFactor } from "./initialData";
 
 const Edge = props => {
   const { link } = props;
@@ -27,8 +28,8 @@ const Edge = props => {
         y1={y1}
         x2={x2}
         y2={y2}
-        strokeWidth={2}
-        stroke={link.color || "#999"}
+        strokeWidth={link.strokeWidth || 2}
+        stroke={link.color || "lightBlue"}
         strokeOpacity={0.6}
       />
       <text
@@ -38,7 +39,8 @@ const Edge = props => {
         fill="steelblue"
         fontFamily="arial"
       >
-        {`${link.label} (${length})`}
+        {/* {`${link.label} (${length})`} */}
+        {` (${(length / scaleFactor).toFixed(2)})`}
       </text>
     </g>
   );

@@ -3,9 +3,8 @@
 
 import React, { createContext, useState } from "react";
 import initialData, {
-  initialSourceNodeKey,
-  initialTargetNodeKey,
-  initialZoomFactor
+  initialZoomFactor,
+  initialScenarioData
 } from "./initialData";
 import useLocalStorage from "./useLocalStorage";
 
@@ -21,19 +20,16 @@ export const DataProvider = ({ children }) => {
   const [nodeOrigin, setNodeOrigin] = useState({ x: 0, y: 0 });
   const [bestRoute, setBestRoute] = useLocalStorage("bestRoute", []);
 
+  const [scenarioData, setScenarioData] = useLocalStorage(
+    "scenarioData",
+    initialScenarioData
+  );
   // The high-level information about the scenario
   const [graphData, setGraphData] = useLocalStorage("initialData", initialData);
+
   const [zoomFactor, setZoomFactor] = useLocalStorage(
     "zoomFactor",
     initialZoomFactor
-  );
-  const [sourceNodeKey, setSourceNodeKey] = useLocalStorage(
-    "sourceNodeKey",
-    initialSourceNodeKey
-  );
-  const [targetNodeKey, setTargetNodeKey] = useLocalStorage(
-    "targetNodeKey",
-    initialTargetNodeKey
   );
 
   return (
@@ -49,16 +45,14 @@ export const DataProvider = ({ children }) => {
         setOrigin,
         graphData,
         setGraphData,
+        scenarioData,
+        setScenarioData,
         nodeOrigin,
         setNodeOrigin,
         activeNodeIndex,
         setActiveNodeIndex,
         bestRoute,
         setBestRoute,
-        sourceNodeKey,
-        setSourceNodeKey,
-        targetNodeKey,
-        setTargetNodeKey,
         zoomFactor,
         setZoomFactor
       }}

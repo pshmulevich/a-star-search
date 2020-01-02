@@ -4,36 +4,37 @@ import { Graph } from "@vx/network";
 import Node from "./node";
 import Edge from "./edge";
 import axios from "axios";
-import { linksMap } from "./initialData";
+import { serviceEndpoint } from "./configuration";
 
 const GraphWithLabels = ({ width, height }) => {
   const appData = useContext(DataContext);
   const graphData = appData.graphData;
   const activeNodeIndex = appData.activeNodeIndex;
 
-  const updateEdges = (edges, color) => {
+  const updateEdges = (edges, color, thickness) => {
     edges.forEach(edge => {
       const edgeKey = `${edge.sourceKey},${edge.targetKey}`;
-      const link = linksMap[edgeKey];
+      const link = graphData.linksMap[edgeKey];
       link.color = color;
+      link.strokeWidth = thickness;
       //console.log("Edgekey: ", edgeKey, "color: ", color,  "link.color: ", link.color);
     });
   };
 
   const handleSubmit = () => {
     //clear selected edges before computing new best route
-    updateEdges(appData.bestRoute, undefined);
+    updateEdges(appData.bestRoute, undefined, undefined);
     appData.setBestRoute([]);
     //console.log("appData.graph data", appData.graphData);
 
-    const serviceUrl = "/api/findRoute";
+    const serviceUrl = serviceEndpoint;
 
     const scenarioData = {
       //request body AKA payload
       edges: appData.graphData.links,
       nodes: appData.graphData.nodes,
-      originNode: appData.sourceNodeKey,
-      destinationNode: appData.targetNodeKey
+      originNode: appData.graphData.from,
+      destinationNode: appData.graphData.to
     };
     console.log("post request to", serviceUrl, "payload:", scenarioData);
     axios.post(serviceUrl, scenarioData).then(
@@ -41,7 +42,7 @@ const GraphWithLabels = ({ width, height }) => {
         console.log("Route data: ", response.data);
 
         //Make selected edges red
-        updateEdges(response.data.edges, "red");
+        updateEdges(response.data.edges, "red", 6);
         appData.setBestRoute(response.data.edges);
         //this.props.history.push("/otherPage");
       },
@@ -54,7 +55,7 @@ const GraphWithLabels = ({ width, height }) => {
     localStorage.clear();
     window.location.reload(false);
   };
-  //console.log("appData.graphData: ", appData.graphData);
+  console.log("appData.graphData: ", appData.graphData);
   const handleOnMouseMove = e => {
     e.preventDefault();
     if (appData.dragging) {
@@ -89,7 +90,7 @@ const GraphWithLabels = ({ width, height }) => {
   const graphWidth = Math.max(...nodeXValues) - Math.min(...nodeXValues) + 200;
   const zoomFactor = Math.min(width / graphWidth, height / graphHeight);
   appData.setZoomFactor(zoomFactor);
-  console.log(zoomFactor);
+  //console.log(zoomFactor);
   return (
     <div>
       <button onClick={handleSubmit}>Submit</button>

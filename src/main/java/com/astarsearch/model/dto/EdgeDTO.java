@@ -1,23 +1,23 @@
 package com.astarsearch.model.dto;
 
 public class EdgeDTO {
-	private String sourceKey;
-	private String targetKey;
+	private String from;
+	private String to;
 	private String label;
 	private NodeDTO source;
 	private NodeDTO target;
 	
-	public String getSourceKey() {
-		return sourceKey;
+	public String getFrom() {
+		return from;
 	}
-	public void setSourceKey(String sourceKey) {
-		this.sourceKey = sourceKey;
+	public void setFrom(String sourceKey) {
+		this.from = sourceKey;
 	}
-	public String getTargetKey() {
-		return targetKey;
+	public String getTo() {
+		return to;
 	}
-	public void setTargetKey(String targetKey) {
-		this.targetKey = targetKey;
+	public void setTo(String targetKey) {
+		this.to = targetKey;
 	}
 	public String getLabel() {
 		return label;
