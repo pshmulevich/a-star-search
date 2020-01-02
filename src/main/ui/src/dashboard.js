@@ -11,9 +11,6 @@ export default class Dashboard extends React.Component {
           <NavLink exact to="/">
             Home
           </NavLink>
-          <NavLink exact to="/settings">
-            Settings
-          </NavLink>
           <NavLink exact to="/about">
             About
           </NavLink>

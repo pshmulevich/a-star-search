@@ -12,7 +12,6 @@ export const DataContext = createContext();
 
 // This context provider is passed to any component requiring the context
 export const DataProvider = ({ children }) => {
-  //const [activeNode, setActiveNode] = useState(null);
   const [activeNodeIndex, setActiveNodeIndex] = useState(-1);
   const [dragging, setDragging] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
@@ -35,8 +34,6 @@ export const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        // activeNode,
-        // setActiveNode,
         dragging,
         setDragging,
         coordinates,

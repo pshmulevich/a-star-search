@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { postProcessData } from "./initialData";
 
-//-------taken from https://usehooks.com/useLocalStorage/ --------------
+//------- See: https://usehooks.com/useLocalStorage/ --------------
 /**
  * Set-up application state variable to be persisted in local storage
  * @param {String} key - local storage key
@@ -24,7 +24,6 @@ const useLocalStorage = (key, initialValue) => {
       const postProcessedItemValue =
         key === "initialData" ? postProcessData(itemValue) : null;
       return postProcessedItemValue || itemValue;
-
     } catch (error) {
       // If error also return initialValue
       console.log(error);

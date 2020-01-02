@@ -48,6 +48,7 @@ export const initialScenarioData = {
   ]
 };
 
+// Used for debugging and testing
 export const initialScenarioData1 = {
   from: "a",
   to: "q",
@@ -59,6 +60,11 @@ export const initialScenarioData1 = {
 };
 
 export const toInitialData = scenarioData => {
+  Object.values(scenarioData.nodes).forEach((node, index) => {
+    node.x = node.x * scaleFactor;
+    node.y = node.y * scaleFactor;
+    node.index = index; // This creates index attribute in the existing node object
+  });
   return {
     to: scenarioData.to,
     from: scenarioData.from,
@@ -86,14 +92,20 @@ export const postProcessData = data => {
   data.links = updatedLinks;
   data.linksMap = linksMap;
 
-  const nodes = Object.values(data.originalNodesMap);
-  const indexedNodes = nodes.map((node, index) => {
-    node.x = node.x * scaleFactor;
-    node.y = node.y * scaleFactor;
-    node.index = index; // This creates index attribute in the existing node object
-    return node;
-  });
   //We can now use indexedNodes
-  data.nodes = indexedNodes;
+  data.nodes = Object.values(data.originalNodesMap);
+
+  const nodeXValues = data.nodes.map(node => {
+    return node.x;
+  });
+  const nodeYValues = data.nodes.map(node => {
+    return node.y;
+  });
+
+  data.graphLeft = Math.min(...nodeXValues) - 150;
+  data.graphRight = Math.max(...nodeXValues) + 200;
+  data.graphTop = Math.min(...nodeYValues) - 100;
+  data.graphBottom = Math.max(...nodeYValues) + 100;
+
   return data;
 };

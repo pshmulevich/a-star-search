@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import Home from "./home";
 import Dashboard from "./dashboard";
-import Settings from "./settings";
 import About from "./about";
+import Settings from "./settings";
 import Notfound from "./notfound";
 import { DataProvider } from "./dataContext";
 

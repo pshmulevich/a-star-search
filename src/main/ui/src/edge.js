@@ -20,7 +20,6 @@ const Edge = props => {
   const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)).toFixed(
     0
   );
-  //console.log("Link-color: ", link.color);
   return (
     <g>
       <line
@@ -39,7 +38,6 @@ const Edge = props => {
         fill="steelblue"
         fontFamily="arial"
       >
-        {/* {`${link.label} (${length})`} */}
         {` (${(length / scaleFactor).toFixed(2)})`}
       </text>
     </g>

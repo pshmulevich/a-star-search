@@ -17,7 +17,6 @@ const GraphWithLabels = ({ width, height }) => {
       const link = graphData.linksMap[edgeKey];
       link.color = color;
       link.strokeWidth = thickness;
-      //console.log("Edgekey: ", edgeKey, "color: ", color,  "link.color: ", link.color);
     });
   };
 
@@ -25,7 +24,6 @@ const GraphWithLabels = ({ width, height }) => {
     //clear selected edges before computing new best route
     updateEdges(appData.bestRoute, undefined, undefined);
     appData.setBestRoute([]);
-    //console.log("appData.graph data", appData.graphData);
 
     const serviceUrl = serviceEndpoint;
 
@@ -44,7 +42,6 @@ const GraphWithLabels = ({ width, height }) => {
         //Make selected edges red
         updateEdges(response.data.edges, "red", 6);
         appData.setBestRoute(response.data.edges);
-        //this.props.history.push("/otherPage");
       },
       error => {
         console.error(error);
@@ -55,7 +52,6 @@ const GraphWithLabels = ({ width, height }) => {
     localStorage.clear();
     window.location.reload(false);
   };
-  console.log("appData.graphData: ", appData.graphData);
   const handleOnMouseMove = e => {
     e.preventDefault();
     if (appData.dragging) {
@@ -79,43 +75,35 @@ const GraphWithLabels = ({ width, height }) => {
       });
     }
   };
+  const handleOnMouseLeave = e => {
+    e.preventDefault();
+    appData.setDragging(false);
+    appData.setActiveNodeIndex(-1);
+  };
 
-  const nodeXValues = appData.graphData.nodes.map(node => {
-    return node.x;
-  });
-  const nodeYValues = appData.graphData.nodes.map(node => {
-    return node.y;
-  });
-  const graphHeight = Math.max(...nodeYValues) - Math.min(...nodeYValues) + 200;
-  const graphWidth = Math.max(...nodeXValues) - Math.min(...nodeXValues) + 200;
-  const zoomFactor = Math.min(width / graphWidth, height / graphHeight);
+  const graphWidth = graphData.graphRight - graphData.graphLeft;
+  const zoomFactor = width / graphWidth;
+
   appData.setZoomFactor(zoomFactor);
-  //console.log(zoomFactor);
+
   return (
     <div>
       <button onClick={handleSubmit}>Submit</button>
       <button onClick={handleReset}>Reset</button>
       <div>
         <svg
-          width={width}
-          height={height}
-          viewBox={`0 0 ${width / zoomFactor} ${height / zoomFactor}`}
-          // width={width}
-          // height={height}
+          viewBox={`${graphData.graphLeft} ${graphData.graphTop} ${
+            graphData.graphRight
+          } ${graphData.graphBottom}`}
+          preserveAspectRatio="xMinYMin slice"
           onTouchMove={handleOnMouseMove}
           onMouseMove={handleOnMouseMove}
-          onMouseLeave={e => {
-            e.preventDefault();
-            appData.setDragging(false);
-            appData.setActiveNodeIndex(-1);
-          }}
+          onMouseLeave={handleOnMouseLeave}
+          onMouseUp={handleOnMouseLeave}
+          onTouchEnd={handleOnMouseLeave}
         >
-          <rect
-            width={width / zoomFactor}
-            height={height / zoomFactor}
-            fill="black"
-          />
           <Graph
+            className="graph"
             graph={appData.graphData}
             nodeComponent={Node}
             linkComponent={Edge}
