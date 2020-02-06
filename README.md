@@ -5,5 +5,10 @@ You can click on and drag the nodes in any direction to change their positions a
 
 ![alt text](https://raw.githubusercontent.com/pshmulevich/a-star-search/master/src/main/ui/src/assets/a-star_service.png)
 
+### The application utilizes:
+* RESTful application service written in Java and Spring Boot. 
+* User interface written in Javascript/React.
+* Maven for dependency management and building an executable jar.
+
 ## A-Star Search Algorithm
 The A-Star, or A-*, search is a path-finding algorithm that is known for its efficiency. The cost of a path is determined by the sum of the distance from the starting node and the estimated remaining distance to the destination node. The algorithm builds new routes by looking at the neighbor nodes at the end of the best existing routes and uses a priority queue to sort routes until it finds the route with the lowest cost.
